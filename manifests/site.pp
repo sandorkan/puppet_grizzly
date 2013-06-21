@@ -1,1 +1,2 @@
-mysql {'mysql':}
+#mysql {'mysql':}
+class {'ntp':}
