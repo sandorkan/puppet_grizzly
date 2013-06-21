@@ -1,0 +1,22 @@
+#!/bin/bash
+mysql -uroot -p<%= @root_pw  %> -e 'delete from mysql.user where User = "";'
+
+mysql -uroot -p<%= @root_pw  %> -e 'create database keystone';
+mysql -uroot -p<%= @root_pw  %> -e 'create database glance';
+mysql -uroot -p<%= @root_pw  %> -e 'create database quantum';
+mysql -uroot -p<%= @root_pw  %> -e 'create database nova';
+mysql -uroot -p<%= @root_pw  %> -e 'create database cinder';
+
+mysql -uroot -p<%= @root_pw  %> -e 'grant all privileges on keystone.* to "keystone"@"%";'
+mysql -uroot -p<%= @root_pw  %> -e 'grant all privileges on glance.* to "glance"@"%";
+mysql -uroot -p<%= @root_pw  %> -e 'grant all privileges on quantum.* to "quantum"@"%";'
+mysql -uroot -p<%= @root_pw  %> -e 'grant all privileges on nova.* to "nova"@"%";'
+mysql -uroot -p<%= @root_pw  %> -e 'grant all privileges on cinder.* to "cinder"@"%";'
+
+mysql -uroot -p<%= @root_pw  %> -e 'set password for "keystone"@"%" = PASSWORD("openstack");'
+mysql -uroot -p<%= @root_pw  %> -e 'set password for "glance"@"%" = PASSWORD("openstack");'
+mysql -uroot -p<%= @root_pw  %> -e 'set password for "quantum"@"%" = PASSWORD("openstack");'
+mysql -uroot -p<%= @root_pw  %> -e 'set password for "nova"@"%" = PASSWORD("openstack");'
+mysql -uroot -p<%= @root_pw  %> -e 'set password for "cinder"@"%" = PASSWORD("openstack");'
+
+mysql -uroot -p<%= @root_pw  %> -e 'flush privileges;'
