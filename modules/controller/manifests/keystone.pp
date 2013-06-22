@@ -1,5 +1,5 @@
 class controller::keystone {
-/*	
+	
 	package{'keystone_pkg': 
 		ensure 	=> installed,
 		name	=> 'keystone',
@@ -9,8 +9,6 @@ class controller::keystone {
 		path	=> '/etc/keystone/keystone.conf',
 		ensure	=> file,
 		content	=> template("controller/keystone/keystone.conf.erb"),
-		require	=> Package['keystone_pkg'],
-	
 	}
 
 	service {'keystone':
@@ -26,33 +24,32 @@ class controller::keystone {
 		refreshonly	=> true,
 	}
 
-
 	file {'keystone_basic_script':
-		path		=> '/etc/puppet/modules/controller/files/keystone/keystone_basic.sh',
+		path		=> '/etc/puppet/modules/controller/files/keystone/keystone_basic',
 		content		=> template("controller/keystone/keystone_basic.sh.erb"),
 		mode		=> 755,
-		before		=> Exec['run_keystone_basic_script']
 	}
 
 	exec {'run_keystone_basic_script':
-		command		=> '/etc/puppet/modules/controller/files/keystone/keystone_basic.sh',
+		command		=> '/etc/puppet/modules/controller/files/keystone/keystone_basic',
 		subscribe	=> File['keystone_basic_script'],
 		refreshonly	=> true,
 		provider	=> shell,
+		returns		=> [0,2],
 	}
-*/
+	
     file {'keystone_endpoint_script':
-        path        => '/etc/puppet/modules/controller/files/keystone/keystone_endpoint.sh',
+        path        => '/etc/puppet/modules/controller/files/keystone/keystone_endpoint',
         content     => template("controller/keystone/keystone_endpoints_basic.sh.erb"),
         mode        => 755,
-        before      => Exec['run_keystone_endpoint_script']
     }   
 
     exec {'run_keystone_endpoint_script':        
-		command     => '/etc/puppet/modules/controller/files/keystone/keystone_endpoint.sh',
+		command     => '/etc/puppet/modules/controller/files/keystone/keystone_endpoint',
         subscribe   => File['keystone_endpoint_script'],
         refreshonly => true,
         provider    => shell,
     }
 
+	Package['keystone_pkg'] -> File['keystone.conf'] -> Exec['sync_keystone_db'] -> File['keystone_basic_script'] -> Exec['run_keystone_basic_script'] -> File['keystone_endpoint_script'] -> Exec['run_keystone_endpoint_script']
 }

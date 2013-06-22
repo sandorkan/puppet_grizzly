@@ -22,5 +22,20 @@ exec {'run_script':
 	refreshonly	=> true,
 }
 */
+/*
+    file {'keystone_basic_script':
+        path        => '/etc/puppet/modules/controller/files/keystone/keystone_basic',
+        content     => template("controller/keystone/keystone_basic.sh.erb"),
+        mode        => 755,
+#        before      => Exec['run_keystone_basic_script']
+    }
+    
+    exec {'run_keystone_basic_script':
+        command     => '/etc/puppet/modules/controller/files/keystone/keystone_basic',
+        subscribe   => File['keystone_basic_script'],
+        refreshonly => true,
+        provider    => shell,
+    }
+*/
 
 #class {'controller::keystone':}

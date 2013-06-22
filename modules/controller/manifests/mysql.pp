@@ -44,7 +44,5 @@ class controller::mysql {
         command     => '/etc/puppet/modules/controller/files/mysql/creating.database.script',
         subscribe   => File["mysql-db-shell-script"],
         refreshonly => true,
-
-    }
-	
+    }	
 }

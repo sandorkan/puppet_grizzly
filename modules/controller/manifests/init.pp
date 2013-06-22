@@ -56,8 +56,8 @@ define controller (
 			
 	class {'controller::keystone':}
 	
-	Class['ntp'] -> Class['controller::mysql'] -> Package['python-mysqldb'] -> Package['vlan'] -> Package['bridge-utils']
-	-> File['sysctl.conf'] -> Exec['set_ip_forward'] -> Class['controller::keystone']	
-
+	Class['ntp'] -> Class['controller::mysql'] -> Package['python-mysqldb'] -> Package['vlan'] -> Package['bridge-utils'] -> File['sysctl.conf'] -> Exec['set_ip_forward'] -> Class['controller::keystone']	
+	
+	# uninstall everything, apt-get purge python-mysqldb vlan bridge-utils python-mysqldb mysql-* ntp
 }
 

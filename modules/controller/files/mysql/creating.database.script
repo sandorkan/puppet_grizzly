@@ -2,17 +2,23 @@
 
 mysql -uroot -popenstack -e 'delete from mysql.user where User = "";'
 
-mysql -uroot -popenstack -e 'delete from mysql.user where User = "keystone";'
-mysql -uroot -popenstack -e 'delete from mysql.user where User = "glance";'
-mysql -uroot -popenstack -e 'delete from mysql.user where User = "quantum";'
-mysql -uroot -popenstack -e 'delete from mysql.user where User = "nova";'
-mysql -uroot -popenstack -e 'delete from mysql.user where User = "cinder";'
+mysql -uroot -popenstack -e 'delete from mysql.user where User = "keystoneUser";'
+mysql -uroot -popenstack -e 'delete from mysql.user where User = "glanceUser";'
+mysql -uroot -popenstack -e 'delete from mysql.user where User = "quantumUser";'
+mysql -uroot -popenstack -e 'delete from mysql.user where User = "novaUser";'
+mysql -uroot -popenstack -e 'delete from mysql.user where User = "cinderUser";'
+
+mysql -uroot -popenstack -e 'drop database if exists keystone';
+mysql -uroot -popenstack -e 'drop database if exists glance';
+mysql -uroot -popenstack -e 'drop database if exists quantum';
+mysql -uroot -popenstack -e 'drop database if exists nova';
+mysql -uroot -popenstack -e 'drop database if exists cinder';
 
 mysql -uroot -popenstack -e 'create database if not exists keystone';
-mysql -uroot -popenstack -e 'create database if not exists '; 
-mysql -uroot -popenstack -e 'create database if not exists ';
-mysql -uroot -popenstack -e 'create database if not exists ';
-mysql -uroot -popenstack -e 'create database if not exists ';
+mysql -uroot -popenstack -e 'create database if not exists glance'; 
+mysql -uroot -popenstack -e 'create database if not exists quantum';
+mysql -uroot -popenstack -e 'create database if not exists nova';
+mysql -uroot -popenstack -e 'create database if not exists cinder';
 
 mysql -uroot -popenstack -e 'grant all privileges on keystone.* to "keystoneUser"@"%";'
 mysql -uroot -popenstack -e 'grant all privileges on glance.* to "glanceUser"@"%";'

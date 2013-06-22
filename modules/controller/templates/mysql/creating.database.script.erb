@@ -2,17 +2,23 @@
 
 mysql -uroot -p<%= @mysql_root_pw  %> -e 'delete from mysql.user where User = "";'
 
-mysql -uroot -p<%= @mysql_root_pw  %> -e 'delete from mysql.user where User = "keystone";'
-mysql -uroot -p<%= @mysql_root_pw  %> -e 'delete from mysql.user where User = "glance";'
-mysql -uroot -p<%= @mysql_root_pw  %> -e 'delete from mysql.user where User = "quantum";'
-mysql -uroot -p<%= @mysql_root_pw  %> -e 'delete from mysql.user where User = "nova";'
-mysql -uroot -p<%= @mysql_root_pw  %> -e 'delete from mysql.user where User = "cinder";'
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'delete from mysql.user where User = "<%= @mysql_keystone_username %>";'
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'delete from mysql.user where User = "<%= @mysql_glance_username %>";'
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'delete from mysql.user where User = "<%= @mysql_quantum_username %>";'
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'delete from mysql.user where User = "<%= @mysql_nova_username %>";'
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'delete from mysql.user where User = "<%= @mysql_cinder_username %>";'
+
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'drop database if exists <%= @mysql_keystone_db_name %>';
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'drop database if exists <%= @mysql_glance_db_name %>';
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'drop database if exists <%= @mysql_quantum_db_name %>';
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'drop database if exists <%= @mysql_nova_db_name %>';
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'drop database if exists <%= @mysql_cinder_db_name %>';
 
 mysql -uroot -p<%= @mysql_root_pw  %> -e 'create database if not exists <%= @mysql_keystone_db_name %>';
-mysql -uroot -p<%= @mysql_root_pw  %> -e 'create database if not exists <%= @glance_db_name %>'; 
-mysql -uroot -p<%= @mysql_root_pw  %> -e 'create database if not exists <%= @quantum_db_name %>';
-mysql -uroot -p<%= @mysql_root_pw  %> -e 'create database if not exists <%= @nova_db_name %>';
-mysql -uroot -p<%= @mysql_root_pw  %> -e 'create database if not exists <%= @cinder_db_name %>';
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'create database if not exists <%= @mysql_glance_db_name %>'; 
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'create database if not exists <%= @mysql_quantum_db_name %>';
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'create database if not exists <%= @mysql_nova_db_name %>';
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'create database if not exists <%= @mysql_cinder_db_name %>';
 
 mysql -uroot -p<%= @mysql_root_pw  %> -e 'grant all privileges on <%= @mysql_keystone_db_name %>.* to "<%= @mysql_keystone_username %>"@"%";'
 mysql -uroot -p<%= @mysql_root_pw  %> -e 'grant all privileges on <%= @mysql_glance_db_name %>.* to "<%= @mysql_glance_username %>"@"%";'
