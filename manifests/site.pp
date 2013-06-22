@@ -1,2 +1,5 @@
 #mysql {'mysql':}
-class {'ntp':}
+#class {'ntp':}
+controller {'controller1':
+
+}
