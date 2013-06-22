@@ -1,0 +1,29 @@
+#!/bin/bash
+
+mysql -uroot -popenstack -e 'delete from mysql.user where User = "";'
+
+mysql -uroot -popenstack -e 'delete from mysql.user where User = "keystone";'
+mysql -uroot -popenstack -e 'delete from mysql.user where User = "glance";'
+mysql -uroot -popenstack -e 'delete from mysql.user where User = "quantum";'
+mysql -uroot -popenstack -e 'delete from mysql.user where User = "nova";'
+mysql -uroot -popenstack -e 'delete from mysql.user where User = "cinder";'
+
+mysql -uroot -popenstack -e 'create database if not exists keystone';
+mysql -uroot -popenstack -e 'create database if not exists '; 
+mysql -uroot -popenstack -e 'create database if not exists ';
+mysql -uroot -popenstack -e 'create database if not exists ';
+mysql -uroot -popenstack -e 'create database if not exists ';
+
+mysql -uroot -popenstack -e 'grant all privileges on keystone.* to "keystoneUser"@"%";'
+mysql -uroot -popenstack -e 'grant all privileges on glance.* to "glanceUser"@"%";'
+mysql -uroot -popenstack -e 'grant all privileges on quantum.* to "quantumUser"@"%";'
+mysql -uroot -popenstack -e 'grant all privileges on nova.* to "novaUser"@"%";' 
+mysql -uroot -popenstack -e 'grant all privileges on cinder.* to "cinderUser"@"%";' 
+
+mysql -uroot -popenstack -e 'set password for "keystoneUser"@"%" = PASSWORD("keystonePass");'
+mysql -uroot -popenstack -e 'set password for "glanceUser"@"%" = PASSWORD("glancePass");'
+mysql -uroot -popenstack -e 'set password for "quantumUser"@"%" = PASSWORD("quantumPass");'
+mysql -uroot -popenstack -e 'set password for "novaUser"@"%" = PASSWORD("novaPass");'
+mysql -uroot -popenstack -e 'set password for "cinderUser"@"%" = PASSWORD("cinderPass");'
+
+mysql -uroot -popenstack -e 'flush privileges;'

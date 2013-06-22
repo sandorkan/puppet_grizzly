@@ -1,0 +1,29 @@
+#!/bin/bash
+
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'delete from mysql.user where User = "";'
+
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'delete from mysql.user where User = "keystone";'
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'delete from mysql.user where User = "glance";'
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'delete from mysql.user where User = "quantum";'
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'delete from mysql.user where User = "nova";'
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'delete from mysql.user where User = "cinder";'
+
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'create database if not exists <%= @mysql_keystone_db_name %>';
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'create database if not exists <%= @glance_db_name %>'; 
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'create database if not exists <%= @quantum_db_name %>';
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'create database if not exists <%= @nova_db_name %>';
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'create database if not exists <%= @cinder_db_name %>';
+
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'grant all privileges on <%= @mysql_keystone_db_name %>.* to "<%= @mysql_keystone_username %>"@"%";'
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'grant all privileges on <%= @mysql_glance_db_name %>.* to "<%= @mysql_glance_username %>"@"%";'
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'grant all privileges on <%= @mysql_quantum_db_name %>.* to "<%= @mysql_quantum_username %>"@"%";'
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'grant all privileges on <%= @mysql_nova_db_name %>.* to "<%= @mysql_nova_username %>"@"%";' 
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'grant all privileges on <%= @mysql_cinder_db_name %>.* to "<%= @mysql_cinder_username %>"@"%";' 
+
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'set password for "<%= @mysql_keystone_username %>"@"%" = PASSWORD("<%= @mysql_keystone_pw %>");'
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'set password for "<%= @mysql_glance_username %>"@"%" = PASSWORD("<%= @mysql_glance_pw %>");'
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'set password for "<%= @mysql_quantum_username %>"@"%" = PASSWORD("<%= @mysql_quantum_pw %>");'
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'set password for "<%= @mysql_nova_username %>"@"%" = PASSWORD("<%= @mysql_nova_pw %>");'
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'set password for "<%= @mysql_cinder_username %>"@"%" = PASSWORD("<%= @mysql_cinder_pw %>");'
+
+mysql -uroot -p<%= @mysql_root_pw  %> -e 'flush privileges;'
