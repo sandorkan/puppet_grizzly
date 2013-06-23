@@ -10,11 +10,11 @@
 # License: Apache Software License (ASL) 2.0
 #
 HOST_IP=<%= @controller_mgmt_network_ip %>
-ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin_pass}
-SERVICE_PASSWORD=${SERVICE_PASSWORD:-service_pass}
+ADMIN_PASSWORD=${ADMIN_PASSWORD:-<%= @keystone_admin_pass %>}
+SERVICE_PASSWORD=${SERVICE_PASSWORD:-<%= @keystone_service_pass %>}
 export SERVICE_TOKEN="ADMIN"
 export SERVICE_ENDPOINT="http://${HOST_IP}:35357/v2.0"
-SERVICE_TENANT_NAME=${SERVICE_TENANT_NAME:-service}
+SERVICE_TENANT_NAME=${SERVICE_TENANT_NAME:-<%= @keystone_service_tenant_name %>}
 
 get_id () {
     echo `$@ | awk '/ id / { print $4 }'`
