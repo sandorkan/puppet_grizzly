@@ -15,6 +15,9 @@ class purge {
 	package {'glance-api':	            ensure => purged,}
 	package {'glance-registry':         ensure => purged,}
 	package {'glance-common':  			ensure => purged,}
+	package {'quantum-common':          ensure => purged,}
+    package {'quantum-server':         	ensure => purged,}
+    package {'quantum-plugin-openvswitch':	ensure => purged,}
 
 	file {'/etc/puppet/modules/controller/files/keystone/keystone_basic': 	ensure => absent,}
 	file {'/etc/puppet/modules/controller/files/keystone/keystone_endpoint': ensure => absent,}

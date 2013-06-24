@@ -43,22 +43,12 @@ define controller (
 	package {'vlan': 			ensure => installed,}
 	package {'bridge-utils':	ensure => installed,}
 
-	file {'sysctl.conf':
-		path	=> '/etc/sysctl.conf',
-		ensure	=> file,
-		source  => "puppet:///modules/controller/sysctl.conf",
-	}
-	
-	exec {'set_ip_forward':
-		path	=> ["/sbin",],
-		command	=> "sysctl net.ipv4.ip_forward=1",
-	}
-			
+	class {'common::set_ip_forward':}
 	class {'controller::keystone':}
 	class {'controller::glance':}	
-	
+	class {'controller::quantum':}	
 
-	Class['ntp'] -> Class['controller::mysql'] -> Package['python-mysqldb'] -> Package['vlan'] -> Package['bridge-utils'] -> File['sysctl.conf'] -> Exec['set_ip_forward'] -> Class['controller::keystone'] -> Class['controller::glance']	
+	Class['ntp'] -> Class['controller::mysql'] -> Package['python-mysqldb'] -> Package['vlan'] -> Package['bridge-utils'] -> Class['common::set_ip_forward'] -> Class['controller::keystone'] -> Class['controller::glance'] -> Class['controller::quantum']	
 	
 }
 
