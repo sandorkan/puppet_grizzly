@@ -1,0 +1,11 @@
+#!/bin/sh
+fdisk /dev/sdb << EOF
+n
+p
+1
+2048
+10485759
+t
+8e
+w
+EOF

@@ -32,8 +32,25 @@ class purge {
 	package {'nova-doc':  		ensure => purged,}
 	package {'nova-scheduler': 	ensure => purged,}
 	
-	#package {'':  ensure => purged,}
+	package {'cinder-api':  		ensure => purged,}
+	package {'cinder-scheduler':  	ensure => purged,}
+	package {'cinder-volume':  		ensure => purged,}
+	package {'cinder-common':	 	ensure => purged,}
+	package {'iscsitarget':  		ensure => purged,}
+	package {'open-iscsi':  		ensure => purged,}
+	package {'iscsitarget-dkms':  	ensure => purged,}
+
 	
+	exec {'create.lvm.cinder.volume':
+        path        => "/sbin",
+        command     => "vgremove cinder-volumes && pvremove /dev/sdb1",
+	}	
+
+	package {'openstack-dashboard':	ensure => purged,}
+	package {'memcached': ensure => purged,}	
+
+	#package {'':  ensure => purged,}
+
 	file {'/etc/puppet/modules/controller/files/keystone/keystone_basic': 	ensure => absent,}
 	file {'/etc/puppet/modules/controller/files/keystone/keystone_endpoint': ensure => absent,}
 	file {'/etc/puppet/modules/controller/files/mysql/creating.database.script': ensure => absent,}
