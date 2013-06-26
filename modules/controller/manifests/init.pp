@@ -33,7 +33,7 @@ define controller (
 	)
 
 
-	{
+{
 
 	class {'ntp':}
 	
@@ -47,8 +47,9 @@ define controller (
 	class {'controller::keystone':}
 	class {'controller::glance':}	
 	class {'controller::quantum':}	
+	class {'controller::nova':}
 
-	Class['ntp'] -> Class['controller::mysql'] -> Package['python-mysqldb'] -> Package['vlan'] -> Package['bridge-utils'] -> Class['common::set_ip_forward'] -> Class['controller::keystone'] -> Class['controller::glance'] -> Class['controller::quantum']	
+	Class['ntp'] -> Class['controller::mysql'] -> Package['python-mysqldb'] -> Package['vlan'] -> Package['bridge-utils'] -> Class['common::set_ip_forward'] -> Class['controller::keystone'] -> Class['controller::glance'] -> Class['controller::quantum'] -> Class['controller::nova']	
 	
 }
 

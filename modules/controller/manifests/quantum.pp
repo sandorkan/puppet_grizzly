@@ -10,6 +10,7 @@ class controller::quantum {
 		ensure	=> file,
 		content	=> template('controller/quantum/ovs_quantum_plugin.ini.erb'),
 		notify  => Service['quantum-server'],
+		require	=> Package['quantum-server_pkg'],
 	}
 
 	file {'api.paste.ini':
@@ -17,6 +18,7 @@ class controller::quantum {
         ensure  => file,
         content => template('controller/quantum/api-paste.ini.erb'),
 		notify  => Service['quantum-server'],
+		require => Package['quantum-server_pkg'],
     }
 
 	file {'quantum.conf':
@@ -24,6 +26,7 @@ class controller::quantum {
         ensure  => file,
         content => template('controller/quantum/quantum.conf.erb'),
 		notify	=> Service['quantum-server'],
+		require => Package['quantum-server_pkg'],
     }
 	
 	service {'quantum-server':
