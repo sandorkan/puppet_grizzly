@@ -1,0 +1,25 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+#auto eth0
+#iface eth0 inet dhcp
+
+# OpenStack Management Network
+auto <%= $controller_mgmt_network_if %>
+iface <%= $controller_mgmt_network_if %> inet static
+  address <%= $controller_mgmt_network_ip %>
+  netmask <%= $controller_mgmt_network_ip_netmask %>
+
+# OpenStack API Network (Internet Access)
+auto <%= $controller_ext_network_if %>
+iface <%= $controller_ext_network_if %> inet static
+  address <%= $controller_ext_network_ip %>
+  netmask <%= $controller_ext_network_ip_netmask %>
+  gateway <%= $controller_gateway %>
+  dns-nameservers 8.8.8.8 8.8.4.4
+

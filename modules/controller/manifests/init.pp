@@ -1,8 +1,22 @@
-define controller {
+define controller(
+	 	$controller_mgmt_network_ip = '10.10.10.51',
+    	$controller_mgmt_network_ip_netmask = '255.255.255.0',
+		$controller_mgmt_network_if = 'eth0',
+
+    	$controller_ext_network_ip  = '192.168.100.51',
+		$controller_ext_network_ip_netmask = '255.255.255.0',
+    	$controller_ext_network_if  = 'eth1',
+
+		$controller_gateway			= '192.168.100.1',
+		
+	)
+	{
 
 	# Here the common parameters are included. sadly I could not access them in the parameters
- 	include common::parameter
-	
+ 	***************
+	include common::parameter
+	***************
+
 	$mysql_root_pw              = $common::parameter::mysql_root_pw
     $mysql_bind_address         = $common::parameter::mysql_bind_address
 
@@ -26,8 +40,8 @@ define controller {
     $mysql_cinder_username      = $common::parameter::mysql_cinder_username
     $mysql_cinder_pw            = $common::parameter::mysql_cinder_pw
 
-    $controller_mgmt_network_ip = $common::parameter::controller_mgmt_network_ip
-    $controller_ext_network_ip  = $common::parameter::controller_ext_network_ip
+#   $controller_mgmt_network_ip = $common::parameter::controller_mgmt_network_ip
+#   $controller_ext_network_ip  = $common::parameter::controller_ext_network_ip
 
     $keystone_admin_pass        = $common::parameter::keystone_admin_pass
     $keystone_service_pass      = $common::parameter::keystone_service_pass
