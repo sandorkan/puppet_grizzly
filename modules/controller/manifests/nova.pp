@@ -47,14 +47,6 @@ class controller::nova {
         ensure  => installed,
     }
 
-	exec {'sync.nova.db':
-		path		=> "/usr/bin",
-		command		=> "nova-manage db sync",
-		refreshonly	=> true,
-		subscribe	=> [File['nova.api.paste.ini'],File['nova.conf']],
-	#	require		=> [File['nova.api.paste.ini'],File['nova.conf']],
-	}
-
 	file {'nova.api.paste.ini':
 		path	=> '/etc/nova/api-paste.ini',
 		ensure	=> file,
@@ -66,19 +58,26 @@ class controller::nova {
         path    => '/etc/nova/nova.conf',
         ensure  => file,
         content => template('controller/nova/nova.conf.erb'),
-		require	=> Package['nova-conductor_pkg'],
+		require	=> File['nova.api.paste.ini'],
+    }
+
+	exec {'sync.nova.db':
+        path        => "/usr/bin",
+        command     => "nova-manage db sync",
+        refreshonly => true,
+        subscribe   => File['nova.conf'],
     }
 
 	exec {'restart.nova.services':
-        path        => "/usr/bin",
-        command     => "for i in $( ls /etc/init.d/nova-* ); do sudo service $i restart; done",
-    #   refreshonly => true,
-    #   subscribe   => [File['nova.api.paste.ini'],File['nova.conf']],
-        require     => Exec['sync.nova.db'],
+  #      path        => "/usr/bin",
+        command     => "/etc/puppet/modules/controller/files/nova/restart.services",
+       	refreshonly => true,
+    	subscribe   => Exec['sync.nova.db'],
+    #   require     => Exec['sync.nova.db'],
     }
 	
+/*
 
-	/*
 	service {'nova-api':
 		ensure		=> running,
 		enable		=> true,
