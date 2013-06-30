@@ -39,24 +39,21 @@ define controller {
 	
 	class {'controller::mysql':}
  	
+	package {'rabbitmq-server':	ensure => installed,}
 	package {'python-mysqldb': 	ensure => installed,}
 	package {'vlan': 			ensure => installed,}
 	package {'bridge-utils':	ensure => installed,}
-
+	
 	class {'common::set_ip_forward':}
 	class {'controller::keystone':}
 
 	class {'controller::glance':}	
 	class {'controller::quantum':}
 	class {'controller::nova':}	
-
-/*
 	class {'controller::cinder':}
 	class {'controller::horizon':}
-	*/	
 
-#	Class['ntp'] -> Class['controller::mysql'] -> Package['python-mysqldb'] -> Package['vlan'] -> Package['bridge-utils'] -> Class['common::set_ip_forward'] -> Class['controller::keystone'] -> Class['controller::glance'] -> Class['controller::quantum'] -> Class['controller::nova'] 
-#-> Class['controller::cinder'] -> Class['controller::horizon']	
+	Class['ntp'] -> Class['controller::mysql'] -> Package['rabbitmq-server'] -> Package['python-mysqldb'] -> Package['vlan'] -> Package['bridge-utils'] -> Class['common::set_ip_forward'] -> Class['controller::keystone'] -> Class['controller::glance'] -> Class['controller::quantum'] -> Class['controller::nova'] -> Class['controller::cinder'] -> Class['controller::horizon']	
 
 }
 

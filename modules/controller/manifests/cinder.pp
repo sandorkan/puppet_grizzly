@@ -38,10 +38,10 @@ class controller::cinder {
 	file{'iscsitarget':
 		path	=> '/etc/default/iscsitarget',
 		ensure	=> file,
-		require	=> [Package['iscsitarget_pkg'],Package[open-iscsi_pkg],Package[iscsitarget-dkms_pkg]],
+		require	=> Package[iscsitarget-dkms_pkg],
 		source	=> 'puppet:///modules/controller/cinder/iscsitarget',
 	}
-
+/*
 	service {'iscsitarget':
 		ensure		=> running,
 		enable		=> true,
@@ -53,12 +53,19 @@ class controller::cinder {
         enable      => true,
         subscribe   => File['iscsitarget'],
     }
+*/
+	exec {'restart.iscsi.services':
+        command     => "/etc/puppet/modules/controller/files/cinder/restart.iscsi.services",
+        refreshonly => true,
+        subscribe   => File['iscsitarget'],
+    }
 	
 	file {'cinder.api.paste':
 		ensure	=> file,
 		path	=> '/etc/cinder/api-paste.ini',
 		content	=> template('controller/cinder/api-paste.ini.erb'),
-		require	=> Package['cinder-api_pkg'],
+	#	require	=> Package['cinder-api_pkg'],
+		require	=> Exec['restart.iscsi.services'],
 	}
 		
 	file {'cinder.conf':
@@ -77,7 +84,7 @@ class controller::cinder {
 
 	exec {'create.partition':
 		command		=> '/etc/puppet/modules/controller/files/cinder/create_partition',
-		subscribe	=> File['cinder.conf'],
+		subscribe	=> Exec['sync.cinder.db'],
 		refreshonly	=> true,
 	}
 
@@ -88,6 +95,13 @@ class controller::cinder {
 		subscribe	=> exec['create.partition']
 	}
 
+	exec {'restart.cinder.services':
+        command     => "/etc/puppet/modules/controller/files/cinder/restart.services",
+        refreshonly => true,
+        subscribe   => Exec['create.lvm.cinder.volume'],
+    }
+	
+	/*
 	service {'cinder-api':
         ensure      => running,
         enable      => true,
@@ -104,5 +118,6 @@ class controller::cinder {
         ensure      => running,
         enable      => true,
         subscribe   => [File['cinder.api.paste'],File['cinder.conf']],
-    }	
+    }
+	*/	
 }
