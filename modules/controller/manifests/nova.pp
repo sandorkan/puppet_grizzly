@@ -52,6 +52,7 @@ class controller::nova {
 		command		=> "nova-manage db sync",
 		refreshonly	=> true,
 		subscribe	=> [File['nova.api.paste.ini'],File['nova.conf']],
+	#	require		=> [File['nova.api.paste.ini'],File['nova.conf']],
 	}
 
 	file {'nova.api.paste.ini':
@@ -68,6 +69,16 @@ class controller::nova {
 		require	=> Package['nova-conductor_pkg'],
     }
 
+	exec {'restart.nova.services':
+        path        => "/usr/bin",
+        command     => "for i in $( ls /etc/init.d/nova-* ); do sudo service $i restart; done",
+    #   refreshonly => true,
+    #   subscribe   => [File['nova.api.paste.ini'],File['nova.conf']],
+        require     => Exec['sync.nova.db'],
+    }
+	
+
+	/*
 	service {'nova-api':
 		ensure		=> running,
 		enable		=> true,
@@ -103,4 +114,5 @@ class controller::nova {
         enable      => true,
         subscribe   => [File['nova.api.paste.ini'],File['nova.conf']],
     }
+	*/
 }

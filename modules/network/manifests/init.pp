@@ -1,12 +1,12 @@
-define controller {
+define network {
 
-	# Here the common parameters are included. sadly I could not access them in the parameters
- 	include common::parameter
-	
-	$mysql_root_pw              = $common::parameter::mysql_root_pw
+    // Here the common parameters are included. sadly I could not access them in the parameters
+    include common::parameter
+
+    $mysql_root_pw              = $common::parameter::mysql_root_pw
     $mysql_bind_address         = $common::parameter::mysql_bind_address
 
-	$mysql_keystone_db_name     = $common::parameter::mysql_keystone_db_name
+    $mysql_keystone_db_name     = $common::parameter::mysql_keystone_db_name
     $mysql_keystone_username    = $common::parameter::mysql_keystone_username
     $mysql_keystone_pw          = $common::parameter::mysql_keystone_pw
 
@@ -31,28 +31,11 @@ define controller {
 
     $keystone_admin_pass        = $common::parameter::keystone_admin_pass
     $keystone_service_pass      = $common::parameter::keystone_service_pass
-    $keystone_service_tenant_name = $common::parameter::keystone_service_tenant_name
+    $keystone_service_tenant_name = $common::parameter::service_tenant_name
     $keystone_region            = $common::parameter::keystone_region
-	
-	
-	class {'ntp':}
-	
-	class {'controller::mysql':}
- 	
-	package {'python-mysqldb': 	ensure => installed,}
-	package {'vlan': 			ensure => installed,}
-	package {'bridge-utils':	ensure => installed,}
 
-	class {'common::set_ip_forward':}
-	class {'controller::keystone':}
-
-	class {'controller::glance':}	
-	class {'controller::quantum':}	
-	class {'controller::nova':}
-	class {'controller::cinder':}
-	class {'controller::horizon':}
-
-	Class['ntp'] -> Class['controller::mysql'] -> Package['python-mysqldb'] -> Package['vlan'] -> Package['bridge-utils'] -> Class['common::set_ip_forward'] -> Class['controller::keystone'] -> Class['controller::glance'] -> Class['controller::quantum'] -> Class['controller::nova'] -> Class['controller::cinder'] -> Class['controller::horizon']	
+	class {'ntp':
+		servers	=> ["${controller_mgmt_network_ip}",],
+	}
 
 }
-
