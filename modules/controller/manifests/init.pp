@@ -1,17 +1,17 @@
 define controller(
-	 	$controller_mgmt_network_ip 		= '10.10.10.51',
-    	$controller_mgmt_network_ip_netmask = '255.255.255.0',
-		$controller_mgmt_network_if 		= 'eth0',
+ 	$controller_mgmt_network_ip 		= '10.10.10.51',
+   	$controller_mgmt_network_ip_netmask 	= '255.255.255.0',
+	$controller_mgmt_network_if 		= 'eth0',
 
-    	$controller_ext_network_ip  		= '192.168.100.51',
-		$controller_ext_network_ip_netmask 	= '255.255.255.0',
-    	$controller_ext_network_if  		= 'eth1',
+   	$controller_ext_network_ip  		= '192.168.100.51',
+	$controller_ext_network_ip_netmask 	= '255.255.255.0',
+   	$controller_ext_network_if  		= 'eth1',
 
-		$controller_gateway					= '192.168.100.1',
+	$controller_gateway					= '192.168.100.1',
 		
 	)
 	{
-
+	# Just a test
 	# Here the common parameters are included. sadly I could not access them in the parameters
  	***************
 	include common::parameter
