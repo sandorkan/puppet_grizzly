@@ -1,13 +1,13 @@
 define controller(
-	 	$controller_mgmt_network_ip = '10.10.10.51',
+	 	$controller_mgmt_network_ip 		= '10.10.10.51',
     	$controller_mgmt_network_ip_netmask = '255.255.255.0',
-		$controller_mgmt_network_if = 'eth0',
+		$controller_mgmt_network_if 		= 'eth0',
 
-    	$controller_ext_network_ip  = '192.168.100.51',
-		$controller_ext_network_ip_netmask = '255.255.255.0',
-    	$controller_ext_network_if  = 'eth1',
+    	$controller_ext_network_ip  		= '192.168.100.51',
+		$controller_ext_network_ip_netmask 	= '255.255.255.0',
+    	$controller_ext_network_if  		= 'eth1',
 
-		$controller_gateway			= '192.168.100.1',
+		$controller_gateway					= '192.168.100.1',
 		
 	)
 	{
@@ -48,6 +48,8 @@ define controller(
     $keystone_service_tenant_name = $common::parameter::keystone_service_tenant_name
     $keystone_region            = $common::parameter::keystone_region
 	
+	#should probably be done by provisioning tool
+	#controller::set_networking{'networking_controller1':}	
 	
 	class {'ntp':}
 	

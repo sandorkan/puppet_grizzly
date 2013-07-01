@@ -8,8 +8,8 @@ class controller::mysql {
 	
 	
     exec {'set_mysql_preseed':
-        path    => ["/usr/bin", "/usr/sbin", "/bin"],
-        command => 'cat /etc/puppet/modules/controller/files/mysql.preseed | sudo debconf-set-selections',
+        path    => ["/usr/bin", "/bin"],
+        command => 'cat /etc/puppet/modules/controller/files/mysql/mysql.preseed | sudo debconf-set-selections',
         require => File["mysql.preseed"],
     }
 
