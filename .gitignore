@@ -1,0 +1,5 @@
+auth.conf
+etckeeper*
+puppet.conf
+templates/
+fileserver.conf
