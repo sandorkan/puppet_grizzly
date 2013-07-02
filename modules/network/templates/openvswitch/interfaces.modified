@@ -13,7 +13,6 @@ auth eth1
 iface eth1 inet static
   address 10.20.20.52
   netmask 255.255.255.0
-  dns-nameservers 8.8.8.
 
 # OpenStack Externel Network (Same as API Network)
 # VM internet Access
