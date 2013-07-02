@@ -21,13 +21,7 @@ class common::parameter {
     $mysql_cinder_db_name       = 'cinder'
     $mysql_cinder_username      = 'cinderUser'
     $mysql_cinder_pw            = 'cinderPass'
-/*
-    $controller_mgmt_network_ip = '10.10.10.51'
-    $controller_mgmt_network_if	= 'eth0'
 
-	$controller_ext_network_ip  = '192.168.100.51'
-	$controller_ext_network_if 	= 'eth1'
-*/		
 	$network_mgmt_network_ip	= '10.10.10.52'
 	$network_ext_network_ip		= '192.168.100.52'
 	$network_data_network_ip	= '10.20.20.52'
@@ -38,5 +32,3 @@ class common::parameter {
     $keystone_region            = 'RegionOne'
 
 }
-
-

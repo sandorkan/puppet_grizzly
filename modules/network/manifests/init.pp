@@ -1,41 +1,84 @@
-define network {
+define network(
+	
+	$controller_mgmt_network_ip			= '10.10.10.51',
 
-    // Here the common parameters are included. sadly I could not access them in the parameters
-    include common::parameter
+ 	$network_mgmt_network_ip 			= '10.10.10.52',
+   	$network_mgmt_network_ip_netmask 	= '255.255.255.0',
+	$network_mgmt_network_if 			= 'eth0',
 
-    $mysql_root_pw              = $common::parameter::mysql_root_pw
-    $mysql_bind_address         = $common::parameter::mysql_bind_address
+   	$network_data_network_ip  			= '10.20.20.52',
+	$network_data_network_ip_netmask 	= '255.255.255.0',
+   	$network_data_network_if  			= 'eth1',
 
-    $mysql_keystone_db_name     = $common::parameter::mysql_keystone_db_name
-    $mysql_keystone_username    = $common::parameter::mysql_keystone_username
-    $mysql_keystone_pw          = $common::parameter::mysql_keystone_pw
+	$network_ext_network_ip             = '192.168.100.52',
+    $network_ext_network_ip_netmask     = '255.255.255.0',
+    $network_ext_network_if             = 'eth2',	
 
-    $mysql_glance_db_name       = $common::parameter::mysql_glance_db_name
-    $mysql_glance_username      = $common::parameter::mysql_glance_username
-    $mysql_glance_pw            = $common::parameter::mysql_glance_pw
+	$network_gateway					= '192.168.100.1',
+		
+	)
+	{
+	
+	# Here the common parameters are included. sadly I could not access them in the parameters
+ 	
+	# ***************
+	
+		include common::parameter
+
+	# ***************
 
     $mysql_quantum_db_name      = $common::parameter::mysql_quantum_db_name
     $mysql_quantum_username     = $common::parameter::mysql_quantum_username
     $mysql_quantum_pw           = $common::parameter::mysql_quantum_pw
 
-    $mysql_nova_db_name         = $common::parameter::mysql_nova_db_name
-    $mysql_nova_username        = $common::parameter::mysql_nova_username
-    $mysql_nova_pw              = $common::parameter::mysql_nova_pw
-
-    $mysql_cinder_db_name       = $common::parameter::mysql_cinder_db_name
-    $mysql_cinder_username      = $common::parameter::mysql_cinder_username
-    $mysql_cinder_pw            = $common::parameter::mysql_cinder_pw
-
-    $controller_mgmt_network_ip = $common::parameter::controller_mgmt_network_ip
-    $controller_ext_network_ip  = $common::parameter::controller_ext_network_ip
-
-    $keystone_admin_pass        = $common::parameter::keystone_admin_pass
-    $keystone_service_pass      = $common::parameter::keystone_service_pass
-    $keystone_service_tenant_name = $common::parameter::service_tenant_name
-    $keystone_region            = $common::parameter::keystone_region
-
+   	$keystone_service_pass      = $common::parameter::keystone_service_pass
+   	$keystone_service_tenant_name = $common::parameter::keystone_service_tenant_name
+	$keystone_region            = $common::parameter::keystone_region
+	
 	class {'ntp':
-		servers	=> ["${controller_mgmt_network_ip}",],
+		servers	=> ['10.10.10.51'],
 	}
 
+	package {'vlan': 			ensure => installed,}
+	package {'bridge-utils':	ensure => installed,}
+	
+	class {'common::set_ip_forward':}
+
+    package {'openvswitch-switch':			ensure => installed,}
+    package {'openvswitch-datapath-dkms':   ensure => installed,}
+
+	exec {'create.bridges':
+		command		=> '/etc/puppet/modules/network/files/openvswitch/create.bridges',
+		refreshonly	=> true,
+		subscribe	=> Package['openvswitch-datapath-dkms'],
+	}
+
+	class {'network::quantum':}
+
+	file {'modified.interfaces':
+		path	=> "/etc/network/interfaces",
+		ensure	=> file,
+		content	=> template("network/openvswitch/interfaces.modified"),
+	}
+
+	exec {'add.interface.to.br':
+		command		=> "/etc/puppet/modules/network/files/openvswitch/add.interface.to.br",
+		refreshonly	=> true,
+		subscribe	=> File['modified.interfaces'],
+	}
+
+/*
+	class {'controller::keystone':}
+
+	class {'controller::glance':}	
+	class {'controller::quantum':}
+	class {'controller::nova':}	
+	class {'controller::cinder':}
+	class {'controller::horizon':}
+
+	Class['ntp'] -> Class['controller::mysql'] -> Package['rabbitmq-server'] -> Package['python-mysqldb'] -> Package['vlan'] -> Package['bridge-utils'] -> Class['common::set_ip_forward'] -> Class['controller::keystone'] -> Class['controller::glance'] -> Class['controller::quantum'] -> Class['controller::nova'] -> Class['controller::cinder'] -> Class['controller::horizon']	
+*/
+	Class['ntp'] -> Package['vlan'] -> Package['bridge-utils'] -> Class['common::set_ip_forward'] -> Package['openvswitch-switch'] -> Package['openvswitch-datapath-dkms'] -> Exec['create.bridges'] -> Class['network::quantum'] -> File['modified.interfaces'] -> Exec['add.interface.to.br']
+
 }
+

@@ -1,0 +1,2 @@
+#!/bin/sh
+ovs-vsctl add-port br-ex eth2

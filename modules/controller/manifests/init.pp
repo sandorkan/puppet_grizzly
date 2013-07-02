@@ -11,11 +11,11 @@ define controller(
 		
 	)
 	{
-	# Just a test
+	
 	# Here the common parameters are included. sadly I could not access them in the parameters
- 	***************
+ 	# ***************
 	include common::parameter
-	***************
+	# ***************
 
 	$mysql_root_pw              = $common::parameter::mysql_root_pw
     $mysql_bind_address         = $common::parameter::mysql_bind_address
