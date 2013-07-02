@@ -1,5 +1,5 @@
 auth.conf
 etckeeper*
 puppet.conf
-templates/
+/etc/puppet/templates/
 fileserver.conf
