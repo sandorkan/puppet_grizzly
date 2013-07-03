@@ -45,7 +45,8 @@ define compute(
 
 	class {'compute::qemu':}
 	class {'compute::openvswitch':}
+	class {'compute::quantum':}
 
-	Class['ntp'] -> Package['vlan'] -> Package['bridge-utils'] -> Class['common::set_ip_forward'] -> Class['compute::qemu'] -> Class['compute::openvswitch']
+	Class['ntp'] -> Package['vlan'] -> Package['bridge-utils'] -> Class['common::set_ip_forward'] -> Class['compute::qemu'] -> Class['compute::openvswitch'] -> Class['compute::quantum']
 }
 
