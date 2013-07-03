@@ -51,15 +51,6 @@ class network::quantum {
         content => template('network/quantum/quantum.conf.erb'),
         before	=> Exec['quantum.restart.services'],
     }
-/*
-	file {'quantum.sudoers':
-		path	=> '/etc/sudoers',
-		ensure	=> file,
-		source  => "puppet:///modules/network/quantum/sudoers",
-		before	=> Exec["quantum.restart.services"],
-		mode	=> 0440,
-	}
-*/
 
 	exec {'copy.sudoers':
 		path		=> "/bin",

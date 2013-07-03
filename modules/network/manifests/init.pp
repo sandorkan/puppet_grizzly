@@ -67,17 +67,6 @@ define network(
 		subscribe	=> File['modified.interfaces'],
 	}
 
-/*
-	class {'controller::keystone':}
-
-	class {'controller::glance':}	
-	class {'controller::quantum':}
-	class {'controller::nova':}	
-	class {'controller::cinder':}
-	class {'controller::horizon':}
-
-	Class['ntp'] -> Class['controller::mysql'] -> Package['rabbitmq-server'] -> Package['python-mysqldb'] -> Package['vlan'] -> Package['bridge-utils'] -> Class['common::set_ip_forward'] -> Class['controller::keystone'] -> Class['controller::glance'] -> Class['controller::quantum'] -> Class['controller::nova'] -> Class['controller::cinder'] -> Class['controller::horizon']	
-*/
 	Class['ntp'] -> Package['vlan'] -> Package['bridge-utils'] -> Class['common::set_ip_forward'] -> Package['openvswitch-switch'] -> Package['openvswitch-datapath-dkms'] -> Exec['create.bridges'] -> Class['network::quantum'] -> File['modified.interfaces'] -> Exec['add.interface.to.br']
 
 }

@@ -1,0 +1,2 @@
+#!/bin/sh
+ovs-vsctl add-br br-int
