@@ -69,9 +69,8 @@ class controller::nova {
     }
 
 	exec {'restart.nova.services':
-  #      path        => "/usr/bin",
         command     => "/etc/puppet/modules/controller/files/nova/restart.services",
        	refreshonly => true,
     	subscribe   => Exec['sync.nova.db'],
-    #   require     => Exec['sync.nova.db'],
     }
+}
