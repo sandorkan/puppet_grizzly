@@ -25,6 +25,7 @@ class controller::keystone {
 	}
 
 	file {'keystone_basic_script':
+		ensure		=> file,
 		path		=> '/etc/puppet/modules/controller/files/keystone/keystone_basic',
 		content		=> template("controller/keystone/keystone_basic.sh.erb"),
 		mode		=> 755,
@@ -42,6 +43,7 @@ class controller::keystone {
         path        => '/etc/puppet/modules/controller/files/keystone/keystone_endpoint',
         content     => template("controller/keystone/keystone_endpoints_basic.sh.erb"),
         mode        => 755,
+		ensure		=> file,		
     }   
 
     exec {'run_keystone_endpoint_script':        
