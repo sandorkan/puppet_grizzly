@@ -23,6 +23,9 @@ class compute::qemu {
 		ensure	=> file,
 		source	=> "puppet:///modules/compute/qemu/qemu.conf",
 		before	=> File['libvirtd.conf'],
+		owner   => "root",
+        group   => "root",
+        mode    => 0644,
 	}
 
 	exec {'delete.default.virtual.bridges':
@@ -36,6 +39,9 @@ class compute::qemu {
 		ensure	=> file,
 		source	=> "puppet:///modules/compute/qemu/libvirtd.conf",
 		before	=> File['libvirt.bin.conf'],
+		owner   => "root",
+        group   => "root",
+        mode    => 0644,
 	}
  	
 	file {'libvirt.bin.conf':
@@ -43,6 +49,9 @@ class compute::qemu {
 		ensure	=> file,
 		source	=> "puppet:///modules/compute/qemu/libvirt-bin.conf",
 		before	=> File['libvirt.bin'],
+		owner   => "root",
+        group   => "root",
+        mode    => 0644,
 	}
 	
 	file {'libvirt.bin':
@@ -50,6 +59,10 @@ class compute::qemu {
         ensure  => file,
         source  => "puppet:///modules/compute/qemu/libvirt-bin",
         before  => Exec['restart.libvirt.dbus'],
+		owner   => "root",
+        group   => "root",
+        mode    => 0644,
+
     }
 
 	exec {'restart.libvirt.dbus':

@@ -1,7 +1,5 @@
 class purge {
 
-	qemu                qemu-system         qemu-system-common  qemu-system-misc    qemu-system-sparc   qemu-user
-qemu-keymaps        qemu-system-arm     qemu-system-mips    qemu-system-ppc     qemu-system-x86     qemu-utils
 	
     package {'qemu':    			ensure => purged,}
     package {'qemu-keymaps':        ensure => purged,}
@@ -19,7 +17,21 @@ qemu-keymaps        qemu-system-arm     qemu-system-mips    qemu-system-ppc     
 	package {'libvirt-bin':         ensure => purged,}
 	package {'libvirt0':			ensure => purged,}
 
-	package {'pm-utils':          ensure => purged,}
+	package {'pm-utils':          	ensure => purged,}
+
+	package {'nova-common':         ensure => purged,}
+	package {'nova-compute':        ensure => purged,}
+	package {'nova-compute-qemu':	ensure => purged,}
+
+	package {'quantum-common':						ensure => purged,}
+    package {'quantum-plugin-openvswitch':        	ensure => purged,}
+    package {'quantum-plugin-openvswitch-agent':   	ensure => purged,}
+
+	package {'openvswitch-common':                  ensure => purged,}
+    package {'openvswitch-switch':          		ensure => purged,}
+    package {'openvswitch-datapath-dkms':    		ensure => purged,}
+
+	
 }
 
 include purge

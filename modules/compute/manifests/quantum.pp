@@ -11,6 +11,9 @@ class compute::quantum {
         ensure  => file,
         content => template('compute/quantum/ovs_quantum_plugin.ini.erb'),
         before  => File['quantum.conf'],
+		owner   => "root",
+        group   => "quantum",
+        mode    => 0644,
     }
 
 	file {'quantum.conf':
@@ -18,6 +21,9 @@ class compute::quantum {
         ensure  => file,
         content => template('compute/quantum/quantum.conf.erb'),
         before  => Exec['quantum.restart.services'],
+		owner   => "root",
+        group   => "quantum",
+        mode    => 0644,
     }
 
 	exec {'quantum.restart.services':

@@ -1,6 +1,7 @@
 define compute(
 	
 	$controller_mgmt_network_ip			= '10.10.10.51',
+	$controller_ext_network_ip			= '192.168.100.51',
 
  	$compute_mgmt_network_ip 			= '10.10.10.53',
    	$compute_mgmt_network_ip_netmask 	= '255.255.255.0',
@@ -46,7 +47,8 @@ define compute(
 	class {'compute::qemu':}
 	class {'compute::openvswitch':}
 	class {'compute::quantum':}
+	class {'compute::nova':}
 
-	Class['ntp'] -> Package['vlan'] -> Package['bridge-utils'] -> Class['common::set_ip_forward'] -> Class['compute::qemu'] -> Class['compute::openvswitch'] -> Class['compute::quantum']
+	Class['ntp'] -> Package['vlan'] -> Package['bridge-utils'] -> Class['common::set_ip_forward'] -> Class['compute::qemu'] -> Class['compute::openvswitch'] -> Class['compute::quantum'] -> Class['compute::nova']
 }
 

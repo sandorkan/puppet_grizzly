@@ -1,0 +1,2 @@
+#!/bin/sh
+service nova-compute restart
