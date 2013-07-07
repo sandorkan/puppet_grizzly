@@ -1,0 +1,6 @@
+#!/bin/sh
+/sbin/iptables --table nat --append POSTROUTING --out-interface $PUB(eth0) -j MASQUERADE
+/sbin/iptables --append FORWARD --in-interface $PRIV(eth1) -j ACCEPT
+
+sh -c "iptables-save > /etc/iptables.rules"
+
