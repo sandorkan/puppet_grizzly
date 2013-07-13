@@ -41,19 +41,7 @@ class controller::cinder {
 		require	=> Package[iscsitarget-dkms_pkg],
 		source	=> 'puppet:///modules/controller/cinder/iscsitarget',
 	}
-/*
-	service {'iscsitarget':
-		ensure		=> running,
-		enable		=> true,
-		subscribe	=> File['iscsitarget'],
-	}
-
-	service {'open-iscsi':
-        ensure      => running,
-        enable      => true,
-        subscribe   => File['iscsitarget'],
-    }
-*/
+	
 	exec {'restart.iscsi.services':
         command     => "/etc/puppet/modules/controller/files/cinder/restart.iscsi.services",
         refreshonly => true,
@@ -64,7 +52,6 @@ class controller::cinder {
 		ensure	=> file,
 		path	=> '/etc/cinder/api-paste.ini',
 		content	=> template('controller/cinder/api-paste.ini.erb'),
-	#	require	=> Package['cinder-api_pkg'],
 		require	=> Exec['restart.iscsi.services'],
 	}
 		
@@ -100,24 +87,10 @@ class controller::cinder {
         refreshonly => true,
         subscribe   => Exec['create.lvm.cinder.volume'],
     }
-	
-	/*
-	service {'cinder-api':
-        ensure      => running,
-        enable      => true,
-        subscribe   => [File['cinder.api.paste'],File['cinder.conf']],
-    }
 
-	service {'cinder-scheduler':
-        ensure      => running,
-        enable      => true,
-    	subscribe   => [File['cinder.api.paste'],File['cinder.conf']],
+	exec {'create.first.image':
+		command		=>"/etc/puppet/modules/controller/files/cinder/create.first.image",
+		refreshonly	=> true,
+		subscribe	=> Exec['restart.cinder.services'],
 	}
-
-	service {'cinder-volume':
-        ensure      => running,
-        enable      => true,
-        subscribe   => [File['cinder.api.paste'],File['cinder.conf']],
-    }
-	*/	
 }
