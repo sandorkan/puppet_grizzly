@@ -45,6 +45,6 @@ ADMIN_TENANT_ID=$(keystone role-list | awk '/ admin / {print $2}')
 
 QUANTUM_EXT_NET_ID=$(get_id quantum net-create --tenant-id $ADMIN_TENANT_ID ext_net --router:external=True)
 
-quantum subnet-create --tenant-id $ADMIN_TENANT_ID --allocation-pool start=192.168.100.102, end=192.168.100.126 --gateway 192.168.100.1 ext_net 192.168.100.100/24 --enable_dhcp=False
+quantum subnet-create --tenant-id $ADMIN_TENANT_ID --allocation-pool start=192.168.100.102,end=192.168.100.126 --gateway 192.168.100.1 ext_net 192.168.100.100/24 --enable_dhcp=False
 
 quantum router-gateway-set $QUANTUM_ROUTER_ID $QUANTUM_EXT_NET_ID
