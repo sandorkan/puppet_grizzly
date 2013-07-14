@@ -1,0 +1,50 @@
+#!/bin/sh
+HOST_IP=10.10.10.51
+TENANT_NAME="proj_one"
+USER_NAME="user_one"
+USER_PW="user_one"
+
+QUANTUM_NET_NAME="net_proj_one"
+TENANT_NETWORK="50.50.1.0/24"
+ROUTER_NAME="router_proj_one"
+
+export SERVICE_TOKEN="ADMIN"
+export SERVICE_ENDPOINT="http://${HOST_IP}:35357/v2.0"
+
+get_id () {
+    echo `$@ | awk '/ id / { print $4 }'`
+}
+
+# create the user
+PROJ_TENANT_ID=$(get_id keystone tenant-create --name $TENANT_NAME)
+USER_ID=$(get_id keystone user-create --name=$USER_NAME --pass=$USER_PASS --tenant-id $PROJ_TENANT_ID --email="${USER_NAME}@domain.com")
+MEMBER_ROLE_ID=$(keystone role-list | awk '/ Member / {print $2}')
+
+keystone user-role-add --tenant-id $PROJ_TENANT_ID --user-id $USER_ID --role-id $MEMBER_ROLE_ID
+
+# create network, subnet, router etc
+QUANTUM_NET_ID=$(get_id quantum net-create --tenant-id $PROJ_TENANT_ID $QUANTUM_NET_NAME)
+
+QUANTUM_SUBNET_ID=$(get_id quantum subnet-create --tenant-id $PROJ_TENANT_ID $QUANTUM_NET_NAME  $TENANT_NETWORK)
+
+QUANTUM_ROUTER_ID=$(get_id quantum router-create --tenant-id $PROJ_TENANT_ID $ROUTER_NAME)
+
+L3_AGENT_ID=$(quantum agent-list | awk ' / L3 / { print $2 }')
+
+quantum l3-agent-router-add $L3_AGENT_ID $ROUTER_NAME
+
+quantum router-interface-add $QUANTUM_ROUTER_ID $QUANTUM_SUBNET_ID
+
+# here restart quantum services.. but on which node? most likely on network node.. or on all nodes
+service quantum-dhcp-agent restart
+service quantum-metadata-agent restart
+service quantum-l3-agent restart
+service quantum-plugin-openvswitch-agent restart
+
+ADMIN_TENANT_ID=$(keystone role-list | awk '/ admin / {print $2}')
+
+QUANTUM_EXT_NET_ID=$(get_id quantum net-create --tenant-id $ADMIN_TENANT_ID ext_net --router:external=True)
+
+quantum subnet-create --tenant-id $ADMIN_TENANT_ID --allocation-pool start=192.168.100.102, end=192.168.100.126 --gateway 192.168.100.1 ext_net 192.168.100.100/24 --enable_dhcp=False
+
+quantum router-gateway-set $QUANTUM_ROUTER_ID $QUANTUM_EXT_NET_ID
